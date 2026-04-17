@@ -10,7 +10,7 @@
     <!-- Karakter kodlaması UTF-8 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <!-- Mobil cihazlar için responsive tasarım ayarı -->
-    <title>YKS 2026 Asistanı</title>
+    <title>YKS Asistanı</title>
     <!-- Sayfa başlığı -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Font Awesome ikon kütüphanesi -->
@@ -75,7 +75,7 @@ if ('serviceWorker' in navigator) {
         header {
             text-align: center;
             padding: 20px 15px;
-            background: linear-gradient(135deg, #ffffff, #f8f9fa); /* Beyaz gradient */
+            background: linear-gradient(135deg, #3003fa, #f8f9fa); /* Beyaz gradient */
             color: var(--dark); /* Koyu metin rengi */
             border-radius: 12px;
             margin-bottom: 20px;
@@ -110,7 +110,7 @@ if ('serviceWorker' in navigator) {
         
         /* Geri sayım konteyneri - Sınav tarihine kalan süreyi gösterir */
         .countdown-container {
-            background-color: #ffffff; /* Beyaz arka plan */
+            background-color: #fcfcfc; /* Beyaz arka plan */
             padding: 20px 15px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -1043,6 +1043,48 @@ if ('serviceWorker' in navigator) {
             .stats-table th, .stats-table td {
                 padding: 8px 5px;
             }
+            
+            /* Mobil iyileştirmeler */
+            .btn {
+                padding: 14px 18px;
+                font-size: 1.1rem;
+                min-height: 48px;
+                min-width: 48px;
+            }
+            
+            .btn-sm {
+                padding: 12px 16px;
+                font-size: 1rem;
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            input[type="text"], input[type="number"], select {
+                font-size: 16px;
+                min-height: 48px;
+                padding: 16px;
+            }
+            
+            .card {
+                padding: 16px 12px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 16px 12px;
+                margin-bottom: 16px;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .header-subtitle {
+                font-size: 0.85rem;
+            }
         }
         
         /* Yatay mod için ayarlamalar */
@@ -1076,7 +1118,7 @@ if ('serviceWorker' in navigator) {
     <!-- Ana Sayfa -->
     <div class="container main-page">
         <header>
-            <h1><i class="fas fa-graduation-cap"></i> YKS 2026 Asistanı</h1>
+            <h1><i class="fas fa-graduation-cap"></i> YKS Asistanı</h1>
             <p class="header-subtitle">20 Haziran 2026, 10:15'e kadar olan yolculuğunuz</p>
         </header>
         
@@ -1183,19 +1225,22 @@ if ('serviceWorker' in navigator) {
                 
                 <div class="tab-container">
                     <div class="tabs">
-                        <div class="tab active" onclick="switchTab('suggested')">Önerilen Konular</div>
+                        <div class="tab active" onclick="switchTab('subjects')">Konularım</div>
                         <div class="tab" onclick="switchTab('resources')">Kaynaklar</div>
                         <div class="tab" onclick="switchTab('add-resource')"><i class="fas fa-plus"></i></div>
                     </div>
                     
-                    <div id="suggested" class="tab-content active">
-                        <ul class="subject-list">
-                            <li><span class="badge badge-tyt">TYT</span> Matematik: Problemler</li>
-                            <li><span class="badge badge-ayt">AYT</span> Edebiyat: Cumhuriyet Dönemi</li>
-                            <li><span class="badge badge-tyt">TYT</span> Fen: Madde ve Özellikleri</li>
-                            <li><span class="badge badge-ayt">AYT</span> Matematik: Türev ve İntegral</li>
-                            <li><span class="badge badge-tyt">TYT</span> Türkçe: Paragraf ve Anlam Bilgisi</li>
+                    <div id="subjects" class="tab-content active">
+                        <div>
+                            <input type="text" id="new-subject" placeholder="Yeni çalışma konusu ekle (Örn: Matematik - Türev)">
+                            <button class="btn" onclick="addSubject()"><i class="fas fa-plus"></i> Ekle</button>
+                        </div>
+                        <ul class="subject-list" id="subjects-list">
+                            <!-- Konular buraya eklenecek -->
                         </ul>
+                        <div class="reset-info">
+                            <i class="fas fa-info-circle"></i> Konular günlük 00:00'da sıfırlanır
+                        </div>
                     </div>
                     
                     <div id="resources" class="tab-content">
@@ -1355,7 +1400,7 @@ if ('serviceWorker' in navigator) {
         </div>
         
         <footer>
-            <p>YKS 2026 Başarılar Dileriz! <i class="fas fa-heart" style="color: var(--accent);"></i></p>
+            <p>YKS Başarılar Dileriz! <i class="fas fa-heart" style="color: var(--accent);"></i></p>
         </footer>
     </div>
 
@@ -1450,6 +1495,9 @@ if ('serviceWorker' in navigator) {
         // Son günlük sıfırlama tarihi - Günlük verilerin sıfırlanma tarihi
         let lastResetDate = new Date().toDateString(); // Bugünün tarihi
         
+        // Günlük çalışma konuları - Her gün sıfırlanır
+        let dailySubjects = [];
+        
         // Derslere göre soru istatistikleri - Her ders için doğru/yanlış/boş sayılarını tutar
         let questionStats = {
             'tyt': {
@@ -1490,6 +1538,10 @@ if ('serviceWorker' in navigator) {
                 document.getElementById('incorrect-questions').value = '0';
                 document.getElementById('empty-questions').value = '0';
                 
+                // Konuları sıfırla
+                document.getElementById('subjects-list').innerHTML = '';
+                dailySubjects = [];
+                
                 // İlerleme çubuklarını güncelle
                 updateProgressBars();
                 
@@ -1500,7 +1552,7 @@ if ('serviceWorker' in navigator) {
                 saveToLocalStorage();
                 
                 // Kullanıcıya bilgi ver
-                showNotification('Yeni gün! Günlük hedefler sıfırlandı. Bugünkü çalışmaya başla!');
+                showNotification('Yeni gün! Günlük hedefler ve konular sıfırlandı. Bugünkü çalışmaya başla!');
             }
         }
         
@@ -1612,6 +1664,10 @@ if ('serviceWorker' in navigator) {
             // Kaynakları sıfırla
             document.getElementById('resources-list').innerHTML = '';
             
+            // Konuları sıfırla
+            document.getElementById('subjects-list').innerHTML = '';
+            dailySubjects = [];
+            
             // Günlük ilerlemeyi sıfırla
             document.getElementById('solved-today').textContent = '0';
             document.getElementById('studied-hours').textContent = '0';
@@ -1651,6 +1707,8 @@ if ('serviceWorker' in navigator) {
                 questionStats: questionStats,
                 targets: document.getElementById('targets-list').innerHTML,
                 resources: document.getElementById('resources-list').innerHTML,
+                subjects: document.getElementById('subjects-list').innerHTML,
+                dailySubjects: dailySubjects,
                 solvedToday: document.getElementById('solved-today').textContent,
                 studiedHours: document.getElementById('studied-hours').textContent,
                 totalQuestions: document.getElementById('total-questions').textContent,
@@ -1689,6 +1747,10 @@ if ('serviceWorker' in navigator) {
                 
                 // Kaynakları yükle
                 document.getElementById('resources-list').innerHTML = data.resources;
+                
+                // Konuları yükle
+                document.getElementById('subjects-list').innerHTML = data.subjects || '';
+                dailySubjects = data.dailySubjects || [];
                 
                 // Günlük ilerlemeyi yükle
                 document.getElementById('solved-today').textContent = data.solvedToday;
@@ -1766,7 +1828,9 @@ if ('serviceWorker' in navigator) {
             const difference = examDate - now;
             
             if (difference <= 0) {
-                document.getElementById('countdown').innerHTML = "<p>Sınav zamanı geldi! Başarılar!</p>";
+                // Sınav tarihi geldiğinde tüm verileri sıfırla
+                resetAllData();
+                document.getElementById('countdown').innerHTML = "<p>Sınav zamanı geldi! Başarılar! Veriler sıfırlandı.</p>";
                 return;
             }
             
@@ -1916,6 +1980,56 @@ if ('serviceWorker' in navigator) {
             showNotification('Hedef başarıyla silindi!');
         }
         
+        // Konu ekleme fonksiyonu
+        function addSubject() {
+            const subjectInput = document.getElementById('new-subject');
+            const subjectText = subjectInput.value.trim();
+            
+            if (subjectText === "") return;
+            
+            const subjectsList = document.getElementById('subjects-list');
+            const listItem = document.createElement('li');
+            
+            listItem.innerHTML = `
+                <div class="target-item">
+                    <div class="target-text">${subjectText}</div>
+                    <div class="target-actions">
+                        <button class="btn btn-sm btn-danger" onclick="removeSubject(this)"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+            
+            subjectsList.appendChild(listItem);
+            subjectInput.value = "";
+            
+            // Array'e ekle
+            dailySubjects.push(subjectText);
+            
+            // localStorage'a kaydet
+            saveToLocalStorage();
+            
+            showNotification('Konu başarıyla eklendi!');
+        }
+        
+        // Konu silme fonksiyonu
+        function removeSubject(button) {
+            const listItem = button.closest('li');
+            const subjectText = listItem.querySelector('.target-text').textContent;
+            
+            // Array'den çıkar
+            const index = dailySubjects.indexOf(subjectText);
+            if (index > -1) {
+                dailySubjects.splice(index, 1);
+            }
+            
+            listItem.remove();
+            
+            // localStorage'a kaydet
+            saveToLocalStorage();
+            
+            showNotification('Konu başarıyla silindi!');
+        }
+        
         // İlerleme durumunu güncelleme
         function updateProgress(checkbox) {
             const listItem = checkbox.closest('li');
@@ -1972,6 +2086,11 @@ if ('serviceWorker' in navigator) {
             const newTotal = currentHours + hours;
             
             studiedHoursElement.textContent = newTotal.toFixed(1);
+            
+            // Günlük çalışma hedefi tamamlandı mı kontrol et
+            if (newTotal >= dailyStudyTarget && currentHours < dailyStudyTarget) {
+                showNotification(`🎉 Tebrikler! Günlük çalışma hedefinizi tamamladınız! (${dailyStudyTarget} saat)`, true);
+            }
             
             updateProgressBars();
             
@@ -2051,6 +2170,11 @@ if ('serviceWorker' in navigator) {
             const currentSolved = parseInt(solvedTodayElement.textContent);
             const newSolvedTotal = currentSolved + totalQuestions;
             solvedTodayElement.textContent = newSolvedTotal;
+            
+            // Günlük soru hedefi tamamlandı mı kontrol et
+            if (newSolvedTotal >= dailyQuestionTarget && currentSolved < dailyQuestionTarget) {
+                showNotification(`🎉 Tebrikler! Günlük soru hedefinizi tamamladınız! (${dailyQuestionTarget} soru)`, true);
+            }
             
             // Toplam soru sayısını güncelle
             const totalQuestionsElement = document.getElementById('total-questions');
