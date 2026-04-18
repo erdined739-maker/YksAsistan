@@ -1312,6 +1312,91 @@ html, body {
     line-height: 1.5;
     white-space: pre-wrap;
 }
+
+.delete-note-btn {
+    background: #ef476f;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.delete-note-btn:hover {
+    background: #d43d5d;
+}
+
+/* Modal stilleri */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e9ecef;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.modal-close:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+
+.modal-body {
+    padding: 20px;
+}
     </style>
 </head>
 <body>
@@ -1432,7 +1517,7 @@ html, body {
                     <div class="tabs">
                         <div class="tab active" onclick="switchTab('subjects')">Konularım</div>
                         <div class="tab" onclick="switchTab('resources')">Kaynaklar</div>
-                        <div class="tab" onclick="switchTab('notes')">Ders Notlarım</div>
+                        <div class="tab" onclick="switchTab('notes')">Not Ekle</div>
                         <div class="tab" onclick="switchTab('add-resource')"><i class="fas fa-plus"></i></div>
                     </div>
                     
@@ -1472,20 +1557,12 @@ html, body {
                                 <option value="İngilizce">İngilizce</option>
                             </select>
                             <input type="text" id="note-topic" placeholder="Konu (Örn: Türev, Osmanlı Devleti)">
-                            <input type="date" id="note-date" style="width: 100%; padding: 10px; border: 2px solid #e9ecef; border-radius: 8px; margin-top: 10px;">
-                            <button class="btn" onclick="addNote()"><i class="fas fa-sticky-note"></i> Not Ekle</button>
+                            <button class="btn" onclick="addNote()" style="margin-top: 15px;"><i class="fas fa-sticky-note"></i> Not Ekle</button>
+                            <button class="btn" onclick="showNotesModal()" style="margin-top: 10px; background: var(--secondary);"><i class="fas fa-list"></i> Notlarım</button>
                         </div>
                         <div style="margin-top: 15px;">
-                            <textarea id="note-content" placeholder="Notunuzun içeriðini yazýn..." style="width: 100%; min-height: 80px; padding: 10px; border: 2px solid #e9ecef; border-radius: 8px; resize: vertical; font-family: inherit;"></textarea>
+                            <textarea id="note-content" placeholder="Notunuzun içeriğini yazın..." style="width: 100%; min-height: 80px; padding: 10px; border: 2px solid #e9ecef; border-radius: 8px; resize: vertical; font-family: inherit;"></textarea>
                         </div>
-                        <div style="margin-top: 10px; text-align: right;">
-                            <button class="btn btn-danger" onclick="clearAllNotes()" style="background: var(--danger); padding: 8px 16px; font-size: 0.9rem;">
-                                <i class="fas fa-trash"></i> Tümünü Temizle
-                            </button>
-                        </div>
-                        <ul class="subject-list" id="notes-list" style="margin-top: 15px;">
-                            <!-- Notlar buraya eklenecek -->
-                        </ul>
                     </div>
                     
                     <div id="add-resource" class="tab-content">
@@ -2431,21 +2508,21 @@ html, body {
             questionStats[currentExamType][subject].incorrect += incorrect;
             questionStats[currentExamType][subject].empty += empty;
             
-            // Günlük ortalamayý hesapla ve güncelle
+            // Günlük ortalamayı hesapla ve güncelle
             const remainingDays = parseInt(document.getElementById('remaining-days').textContent);
             const dailyAverage = remainingDays > 0 ? Math.round(newTotal / (365 - remainingDays)) : Math.round(newTotal / 365);
             document.getElementById('daily-average').textContent = dailyAverage;
             
-            // Performans grafiðini güncelle
+            // Performans grafiğini güncelle
             updatePerformanceChart();
             
-            // Detaylý istatistikleri güncelle
+            // Detaylı istatistikleri güncelle
             updateDetailedStats();
             
-            // ilerleme çubuklarýný güncelle
+            // ilerleme çubuklarını güncelle
             updateProgressBars();
             
-            // Daðýlým grafiklerini güncelle
+            // Dağılım grafiklerini güncelle
             updateDistributionCharts();
             
             showNotification(`${totalQuestions} soru başarıyla eklendi!`);
@@ -2456,67 +2533,118 @@ html, body {
             const subject = document.getElementById('note-subject').value;
             const topic = document.getElementById('note-topic').value.trim();
             const content = document.getElementById('note-content').value.trim();
-            const date = document.getElementById('note-date').value;
             
             if (subject === "" || topic === "" || content === "") {
-                showNotification("Lütfen ders, konu ve not içeriðini doldurunuz.", false);
+                showNotification("Lütfen ders, konu ve not içeriğini doldurunuz.", false);
                 return;
             }
             
-            const notesList = document.getElementById('notes-list');
-            const listItem = document.createElement('li');
+            // Tarih belirle - her zaman bugünkü tarih
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('tr-TR');
+            const timeStr = now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
             
-            // Tarih belirle
-            let dateStr;
-            if (date) {
-                const selectedDate = new Date(date);
-                dateStr = selectedDate.toLocaleDateString('tr-TR');
-            } else {
-                const now = new Date();
-                dateStr = now.toLocaleDateString('tr-TR');
-            }
-            const timeStr = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+            // localStorage'dan not listesini al
+            const savedNotes = localStorage.getItem('yksNotes');
+            const notes = savedNotes ? JSON.parse(savedNotes) : [];
             
-            listItem.innerHTML = `
-                <div class="note-item">
-                    <div class="note-header">
-                        <span class="note-subject">${subject}</span>
-                        <span class="note-topic">${topic}</span>
-                        <span class="note-date">${dateStr} ${timeStr}</span>
-                    </div>
-                    <div class="note-content">${content}</div>
-                </div>
-            `;
+            // Yeni not ekle
+            notes.unshift({
+                subject: subject,
+                topic: topic,
+                content: content,
+                date: `${dateStr} ${timeStr}`
+            });
             
-            notesList.insertBefore(listItem, notesList.firstChild);
+            // localStorage'a kaydet
+            localStorage.setItem('yksNotes', JSON.stringify(notes));
             
             // Formu temizle
             document.getElementById('note-subject').value = "";
             document.getElementById('note-topic').value = "";
-            document.getElementById('note-date').value = "";
             document.getElementById('note-content').value = "";
-            
-            // localStorage'a kaydet
-            saveNotesToLocalStorage();
             
             // Bildirim göster
             showNotification('Not başarıyla eklendi!');
         }
         
-        // Tüm notlarý temizle fonksiyonu
-        function clearAllNotes() {
-            if (confirm('Tüm ders notlarýnýz silinecek. Bu iþlem geri alýnamaz. Emin misiniz?')) {
-                const notesList = document.getElementById('notes-list');
-                notesList.innerHTML = '';
-                
-                // localStorage'dan temizle
+        // Tüm notları temizle fonksiyonu
+        // Modal açma
+        function openNotesModal() {
+            const modal = document.getElementById('notesModal');
+            const notesList = document.getElementById('notes-list');
+            const savedNotes = localStorage.getItem('yksNotes');
+            
+            notesList.innerHTML = '';
+            
+            if (savedNotes) {
+                const notes = JSON.parse(savedNotes);
+                if (notes.length === 0) {
+                    notesList.innerHTML = '<p style="text-align: center; color: #666;">Henüz not eklenmemiş.</p>';
+                } else {
+                    notes.forEach((note, index) => {
+                        const noteDiv = document.createElement('div');
+                        noteDiv.style.cssText = 'border: 1px solid #e9ecef; border-radius: 8px; padding: 15px; background: #f8f9fa; display: flex; justify-content: space-between; align-items: flex-start;';
+                        noteDiv.innerHTML = `
+                            <div style="flex: 1;">
+                                <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+                                    <span style="background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold;">${note.subject}</span>
+                                    <span style="background: var(--accent); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem;">${note.topic}</span>
+                                </div>
+                                <p style="margin: 10px 0; color: #666; font-size: 0.9rem;">${note.content}</p>
+                                <small style="color: #999;">${note.date}</small>
+                            </div>
+                            <button onclick="deleteNote(${index})" style="background: var(--danger); color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; margin-left: 10px; font-size: 0.8rem;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        `;
+                        notesList.appendChild(noteDiv);
+                    });
+                }
+            } else {
+                notesList.innerHTML = '<p style="text-align: center; color: #666;">Henüz not eklenmemiş.</p>';
+            }
+            
+            modal.style.display = 'block';
+        }
+        
+        // Modal dışına tıklandığında kapatma
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('notes-modal');
+            if (event.target === modal) {
+                closeNotesModal();
+            }
+        });
+        
+        // Tekil notu silme
+        function deleteNote(index) {
+            if (confirm('Bu notu silmek istediğinizden emin misiniz?')) {
+                const savedNotes = localStorage.getItem('yksNotes');
+                if (savedNotes) {
+                    const notes = JSON.parse(savedNotes);
+                    notes.splice(index, 1);
+                    localStorage.setItem('yksNotes', JSON.stringify(notes));
+                    openNotesModal(); // Modal'ı yenile
+                    showNotification('Not silindi!');
+                }
+            }
+        }
+        
+        // Tüm notları silme onayı
+        function clearAllNotesConfirm() {
+            if (confirm('Tüm ders notlarınız silinecek. Bu işlem geri alınamaz. Emin misiniz?')) {
                 localStorage.removeItem('yksNotes');
-                
+                openNotesModal(); // Modal'ı yenile
                 showNotification('Tüm notlar temizlendi!');
             }
         }
         
-        // Notlarý localStorage'a kaydet
+        // Eski clearAllNotes fonksiyonu (uyumluluk için)
+        function clearAllNotes() {
+            clearAllNotesConfirm();
+        }
+        
+        // Notları localStorage'a kaydet
         function saveNotesToLocalStorage() {
             const notesList = document.getElementById('notes-list');
             const notes = [];
@@ -2539,7 +2667,7 @@ html, body {
             localStorage.setItem('yksNotes', JSON.stringify(notes));
         }
         
-        // Notlarý localStorage'dan yükle
+        // Notları localStorage'dan yükle
         function loadNotesFromLocalStorage() {
             const savedNotes = localStorage.getItem('yksNotes');
             if (savedNotes) {
@@ -2580,6 +2708,63 @@ html, body {
             // Seçilen tabı ve içeriği aktif yap
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
+        }
+        
+        // Notlar modal'ını göster
+        function showNotesModal() {
+            const modal = document.getElementById('notes-modal');
+            const notesList = document.getElementById('notes-list-modal');
+            
+            // localStorage'dan notları yükle
+            const savedNotes = localStorage.getItem('yksNotes');
+            notesList.innerHTML = '';
+            
+            if (savedNotes) {
+                const notes = JSON.parse(savedNotes);
+                notes.forEach((note, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <div class="note-item">
+                            <div class="note-header">
+                                <span class="note-subject">${note.subject}</span>
+                                <span class="note-topic">${note.topic}</span>
+                                <span class="note-date">${note.date}</span>
+                                <button class="delete-note-btn" onclick="deleteNote(${index})" title="Notu Sil">&times;</button>
+                            </div>
+                            <div class="note-content">${note.content}</div>
+                        </div>
+                    `;
+                    notesList.appendChild(listItem);
+                });
+            } else {
+                notesList.innerHTML = '<p style="text-align: center; color: #666;">Henüz not eklenmemiş.</p>';
+            }
+            
+            modal.style.display = 'block';
+        }
+        
+        // Tek not sil
+        function deleteNote(index) {
+            const savedNotes = localStorage.getItem('yksNotes');
+            if (savedNotes) {
+                const notes = JSON.parse(savedNotes);
+                notes.splice(index, 1); // İndeksteki notu sil
+                localStorage.setItem('yksNotes', JSON.stringify(notes));
+                
+                // DOM'dan da sil
+                const notesList = document.getElementById('notes-list-modal');
+                const listItems = notesList.querySelectorAll('li');
+                if (listItems[index]) {
+                    listItems[index].remove();
+                }
+                
+                showNotification('Not silindi!');
+            }
+        }
+        
+        // Notlar modal'ını kapat
+        function closeNotesModal() {
+            document.getElementById('notes-modal').style.display = 'none';
         }
         
         // Dağılım sayfasını göster
@@ -2703,6 +2888,8 @@ html, body {
         document.addEventListener('DOMContentLoaded', function() {
             updateCountdown();
             setInterval(updateCountdown, 1000);
+            loadNotesFromLocalStorage(); // Notları yükle
+        });
             
             // localStorage'dan verileri yükle
             loadFromLocalStorage();
@@ -2717,12 +2904,52 @@ html, body {
             if (navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform)) {
                 document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
             }
-        });
+        ;
     </script>
     <script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
 }
 </script>
+
+    <!-- Notları Görüntüleme Modal -->
+    <div id="notesModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; overflow-y: auto;">
+        <div style="position: relative; background: white; margin: 20px auto; max-width: 600px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); max-height: 80vh; overflow-y: auto;">
+            <div style="position: sticky; top: 0; background: var(--primary); color: white; padding: 20px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center; z-index: 10;">
+                <h2 style="margin: 0; font-size: 1.5rem;">
+                    <i class="fas fa-book"></i> Notlarım
+                </h2>
+                <button onclick="closeNotesModal()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; padding: 0; width: 30px; height: 30px;">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div style="padding: 20px;">
+                <div id="notes-list" style="display: flex; flex-direction: column; gap: 15px;">
+                    <!-- Notlar buraya eklenecek -->
+                </div>
+                <div style="margin-top: 20px; text-align: center;">
+                    <button class="btn btn-danger" onclick="clearAllNotesConfirm()" style="background: var(--danger); padding: 8px 16px; font-size: 0.9rem;">
+                        <i class="fas fa-trash"></i> Tümünü Sil
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notlar Modal -->
+    <div id="notes-modal" class="modal" onclick="if(event.target === this) closeNotesModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-sticky-note"></i> Notlarım</h3>
+                <button class="modal-close" onclick="closeNotesModal(); event.stopPropagation();">&times;</button>
+            </div>
+            <div class="modal-body">
+                <ul class="subject-list" id="notes-list-modal" style="margin-top: 15px;">
+                    <!-- Notlar buraya eklenecek -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
