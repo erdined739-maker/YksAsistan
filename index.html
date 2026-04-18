@@ -322,19 +322,19 @@
             background-color: var(--primary); /* Canlı mavi arka plan */
             color: white; /* Beyaz metin */
             border: none;
-            padding: 0 16px;
-            border-radius: 12px;
+            padding: 8px 12px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            min-height: 50px;
+            gap: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            min-height: 36px;
             width: 100%;
-            max-width: 220px;
+            max-width: 180px;
             touch-action: manipulation;
             margin: 0 auto;
         }
@@ -1331,6 +1331,33 @@ html, body {
 
 .delete-note-btn:hover {
     background: #d43d5d;
+}
+
+/* Mobil uyumluluk */
+@media (max-width: 768px) {
+    .btn {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+        min-height: 32px;
+        max-width: 150px;
+    }
+    
+    .tab {
+        font-size: 0.8rem;
+        padding: 8px 12px;
+    }
+    
+    .card h2 {
+        font-size: 1.1rem;
+    }
+    
+    .stat-label {
+        font-size: 0.8rem;
+    }
+    
+    .stat-value {
+        font-size: 1.2rem;
+    }
 }
 
 /* Modal stilleri */
@@ -2729,7 +2756,7 @@ html, body {
                                 <span class="note-subject">${note.subject}</span>
                                 <span class="note-topic">${note.topic}</span>
                                 <span class="note-date">${note.date}</span>
-                                <button class="delete-note-btn" onclick="deleteNote(${index})" title="Notu Sil">&times;</button>
+                                <button class="delete-note-btn" onclick="deleteNote(${index}); event.stopPropagation();" title="Notu Sil">&times;</button>
                             </div>
                             <div class="note-content">${note.content}</div>
                         </div>
@@ -2748,15 +2775,11 @@ html, body {
             const savedNotes = localStorage.getItem('yksNotes');
             if (savedNotes) {
                 const notes = JSON.parse(savedNotes);
-                notes.splice(index, 1); // İndeksteki notu sil
+                notes.splice(index, 1); // indeksteki notu sil
                 localStorage.setItem('yksNotes', JSON.stringify(notes));
                 
-                // DOM'dan da sil
-                const notesList = document.getElementById('notes-list-modal');
-                const listItems = notesList.querySelectorAll('li');
-                if (listItems[index]) {
-                    listItems[index].remove();
-                }
+                // Modal' yenile - tüm notlar tekrar yüklensin
+                showNotesModal();
                 
                 showNotification('Not silindi!');
             }
