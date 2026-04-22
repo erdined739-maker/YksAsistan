@@ -758,15 +758,18 @@
         
         /* Doğru/Yanlış/Boş Stilleri */
         .question-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
             margin-bottom: 15px;
+            flex-wrap: wrap;
         }
         
         .stat-input-group {
             display: flex;
             flex-direction: column;
+            flex: 1;
+            min-width: 0;
         }
         
         .stat-input-group label {
@@ -1265,12 +1268,30 @@ html, body {
 
 /* Mobil uyumluluk */
 @media (max-width: 768px) {
+    .container {
+        padding: 5px !important;
+    }
+    
+    .card, header, .countdown-container {
+        width: 98% !important;
+        margin: 5px auto !important;
+    }
+    
     .btn {
         font-size: 0.8rem;
         padding: 7px 12px;
         min-height: 34px;
         max-width: 140px;
         gap: 4px;
+    }
+    
+    .question-stats {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .stat-input-group {
+        width: 100%;
     }
     
     .tab {
@@ -1295,11 +1316,55 @@ html, body {
         padding: 10px;
         font-size: 14px;
         min-height: 38px;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     textarea {
         padding: 8px;
         font-size: 14px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    
+    .exam-info {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .exam-badge {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+    }
+    
+    header {
+        padding: 10px;
+    }
+    
+    header h1 {
+        font-size: 1.4rem;
+    }
+    
+    .header-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .countdown-unit {
+        min-width: 60px;
+        padding: 8px 4px;
+    }
+    
+    .countdown-value {
+        font-size: 1.4rem;
+    }
+    
+    .countdown-label {
+        font-size: 0.7rem;
     }
 }
 
@@ -1367,14 +1432,345 @@ html, body {
 .modal-body {
     padding: 20px;
 }
+
+/* Giriş Sayfası Stilleri */
+.login-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    transform: rotate(30deg);
+    animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: rotate(30deg) translateY(0); }
+    50% { transform: rotate(30deg) translateY(-20px); }
+}
+
+.login-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    position: relative;
+    z-index: 1;
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h1 {
+    color: var(--primary);
+    font-size: 2rem;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.login-header p {
+    color: #6c757d;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    position: relative;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--dark);
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    transition: color 0.3s ease;
+    margin-top: 12px;
+}
+
+.password-toggle:hover {
+    color: var(--primary);
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.forgot-password {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: var(--secondary);
+    text-decoration: underline;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.register-link p {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.register-link a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.register-link a:hover {
+    color: var(--secondary);
+    text-decoration: underline;
+}
+
+/* Hata Mesajları */
+.error-message {
+    background: #fee;
+    color: var(--danger);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    border-left: 4px solid var(--danger);
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.success-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    border-left: 4px solid #28a745;
+}
+
+/* Mobil Uyumluluk */
+@media (max-width: 768px) {
+    .login-card {
+        padding: 30px 20px;
+        margin: 10px;
+    }
+    
+    .login-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .form-group input {
+        padding: 12px;
+    }
+    
+    .login-btn {
+        padding: 12px;
+        font-size: 1rem;
+    }
+}
     </style>
 </head>
 <body>
-    <!-- Ana Sayfa -->
+    <!-- Giriş Sayfası -->
+    <div id="login-page" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1><i class="fas fa-graduation-cap"></i> YKS Asistanı</h1>
+                <p>Hesabınıza giriş yapın</p>
+            </div>
+            
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> E-posta</label>
+                    <input type="email" id="email" name="email" placeholder="ornek@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Sifre</label>
+                    <input type="password" id="password" name="password" placeholder="Sifrenizi girin" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword()">
+                        <i class="fas fa-eye" id="password-icon"></i>
+                    </button>
+                </div>
+                
+                <div class="form-options">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="remember-me">
+                        <span class="checkmark"></span>
+                        Beni hatirla
+                    </label>
+                    <a href="#" class="forgot-password">Sifremi unuttum</a>
+                </div>
+                
+                <button type="submit" class="btn btn-primary login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Giris Yap
+                </button>
+                
+                <div class="register-link">
+                    <p>Hesabiniz yok mu? <a href="#" onclick="showRegisterPage()">Kayit Ol</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Kayıt Sayfası -->
+    <div id="register-page" class="login-container" style="display: none;">
+        <div class="login-card">
+            <div class="login-header">
+                <h1><i class="fas fa-user-plus"></i> Kayit Ol</h1>
+                <p>Yeni hesap olusturun</p>
+            </div>
+            
+            <form id="register-form" class="login-form" onsubmit="handleRegisterSubmit(event); return false;">
+                <div class="form-group">
+                    <label for="register-name"><i class="fas fa-user"></i> Ad Soyad</label>
+                    <input type="text" id="register-name" name="name" placeholder="Adinizi soyadinizi girin" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-email"><i class="fas fa-envelope"></i> E-posta</label>
+                    <input type="email" id="register-email" name="email" placeholder="ornek@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-password"><i class="fas fa-lock"></i> Sifre</label>
+                    <input type="password" id="register-password" name="password" placeholder="Sifre olusturun" required>
+                    <button type="button" class="password-toggle" onclick="toggleRegisterPassword()">
+                        <i class="fas fa-eye" id="register-password-icon"></i>
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-confirm-password"><i class="fas fa-lock"></i> Sifre Tekrar</label>
+                    <input type="password" id="register-confirm-password" name="confirmPassword" placeholder="Sifrenizi tekrar girin" required>
+                    <button type="button" class="password-toggle" onclick="toggleConfirmPassword()">
+                        <i class="fas fa-eye" id="confirm-password-icon"></i>
+                    </button>
+                </div>
+                
+                <button type="submit" class="btn btn-primary login-btn">
+                    <i class="fas fa-user-plus"></i> Kayit Ol
+                </button>
+                
+                <div class="register-link">
+                    <p>Zaten hesabiniz var mi? <a href="#" onclick="showLoginPage()">Giris Yap</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Ana Uygulama -->
+    <div id="main-app" style="display: none;">
+        <!-- Ana sayfa içeriði -->
     <div class="container main-page">
         <header>
-            <h1><i class="fas fa-graduation-cap"></i> YKS Asistanı</h1>
-            <p class="header-subtitle">20 Haziran 2026, 10:15'e kadar olan yolculuğunuz</p>
+            <h1><i class="fas fa-graduation-cap"></i> YKS Asistaný</h1>
+            <p class="header-subtitle">20 Haziran 2026, 10:15'e kadar olan yolculuðunuz</p>
             <div class="exam-info">
                 <span class="exam-badge tyt-badge">TYT: 160 Dakika</span>
                 <span class="exam-badge ayt-badge">AYT: 180 Dakika</span>
@@ -1687,6 +2083,11 @@ html, body {
         
         <footer>
             <p>YKS Başarılar Dileriz! <i class="fas fa-heart" style="color: var(--accent);"></i></p>
+            <div style="text-align: center; margin-top: 10px;">
+                <button onclick="logout()" style="background: none; border: none; color: #999; font-size: 0.8rem; cursor: pointer; padding: 5px;">
+                    <i class="fas fa-sign-out-alt"></i> Çıkış
+                </button>
+            </div>
         </footer>
     </div>
 
@@ -2921,5 +3322,289 @@ if ("serviceWorker" in navigator) {
         </div>
     </div>
 
+<script>
+        // Giriþ Sistemi JavaScript
+        class AuthSystem {
+            constructor() {
+                this.users = this.loadUsers();
+                this.currentUser = this.getCurrentUser();
+                this.init();
+            }
+            
+            init() {
+                // Sayfa yüklendiğinde kontrol et
+                if (this.currentUser) {
+                    this.showMainApp();
+                } else {
+                    this.showLoginPage();
+                }
+                
+                // Form event listeners
+                document.getElementById('login-form').addEventListener('submit', (e) => this.handleLogin(e));
+                document.getElementById('register-form').addEventListener('submit', (e) => this.handleRegister(e));
+            }
+            
+            loadUsers() {
+                const savedUsers = localStorage.getItem('yksUsers');
+                return savedUsers ? JSON.parse(savedUsers) : [];
+            }
+            
+            saveUsers() {
+                localStorage.setItem('yksUsers', JSON.stringify(this.users));
+            }
+            
+            getCurrentUser() {
+                // Önce localStorage'i kontrol et ("beni hatirla" durumu)
+                const savedUser = localStorage.getItem('yksCurrentUser');
+                if (savedUser) {
+                    return JSON.parse(savedUser);
+                }
+                
+                // Sonra sessionStorage'i kontrol et (normal oturum)
+                const sessionUser = sessionStorage.getItem('yksCurrentUser');
+                if (sessionUser) {
+                    return JSON.parse(sessionUser);
+                }
+                
+                return null;
+            }
+            
+            saveCurrentUser(user, rememberMe = false) {
+                if (rememberMe) {
+                    // "Beni hatirla" seçiliyse - kalici oturum
+                    localStorage.setItem('yksCurrentUser', JSON.stringify(user));
+                    localStorage.setItem('yksRememberMe', 'true');
+                } else {
+                    // Normal oturum - sadece session storage
+                    sessionStorage.setItem('yksCurrentUser', JSON.stringify(user));
+                    localStorage.removeItem('yksRememberMe');
+                }
+            }
+            
+            handleLogin(e) {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const rememberMe = document.getElementById('remember-me').checked;
+                
+                // Kullanıcı bul
+                const user = this.users.find(u => u.email === email);
+                
+                if (!user) {
+                    this.showError('E-posta veya sifre hatali!');
+                    return;
+                }
+                
+                // Basit şifre kontrolü (gerçek uygulamada hash'lenmiþ olmalý)
+                if (user.password !== password) {
+                    this.showError('E-posta veya sifre hatali!');
+                    return;
+                }
+                
+                // Giriş başarılı
+                this.saveCurrentUser(user, rememberMe);
+                this.showSuccess('Giris basarili! Yonlendiriliyorsunuz...');
+                
+                setTimeout(() => {
+                    this.showMainApp();
+                }, 1500);
+            }
+            
+            handleRegister(e) {
+                e.preventDefault();
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+                
+                // Validasyon
+                if (password !== confirmPassword) {
+                    this.showError('Sifreler eslesmiyor!');
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    this.showError('Sifre en az 6 karakter olmali!');
+                    return;
+                }
+                
+                // E-posta kontrolü
+                if (this.users.find(u => u.email === email)) {
+                    this.showError('Bu e-posta zaten kayitli!');
+                    return;
+                }
+                
+                // Yeni kullanici
+                const newUser = {
+                    id: Date.now().toString(),
+                    name: name,
+                    email: email,
+                    password: password, // Gerçek uygulamada hash'lenmeli
+                    createdAt: new Date().toISOString()
+                };
+                
+                this.users.push(newUser);
+                this.saveUsers();
+                
+                this.showSuccess('Kayit basarili! Giris yapabilirsiniz.');
+                
+                // Formu temizle
+                document.getElementById('register-form').reset();
+                
+                // Giriş sayfasına yönlendir
+                setTimeout(() => {
+                    this.showLoginPage();
+                }, 1500);
+            }
+            
+            logout() {
+                // Her iki storage'dan da temizle
+                localStorage.removeItem('yksCurrentUser');
+                localStorage.removeItem('yksRememberMe');
+                sessionStorage.removeItem('yksCurrentUser');
+                this.currentUser = null;
+                this.showLoginPage();
+            }
+            
+            showLoginPage() {
+                document.getElementById('login-page').style.display = 'flex';
+                document.getElementById('register-page').style.display = 'none';
+                document.getElementById('main-app').style.display = 'none';
+                this.clearMessages();
+            }
+            
+            showRegisterPage() {
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('register-page').style.display = 'flex';
+                document.getElementById('main-app').style.display = 'none';
+                this.clearMessages();
+            }
+            
+            showMainApp() {
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('register-page').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                this.clearMessages();
+                
+                // Kullanıcı bilgisini göster
+                this.updateUserInfo();
+            }
+            
+            updateUserInfo() {
+                // Ana sayfada kullanıcı bilgisini göster
+                const header = document.querySelector('header p.header-subtitle');
+                if (header && this.currentUser) {
+                    header.textContent = `Hoş geldin, ${this.currentUser.name}! 20 Haziran 2026, 10:15'e kadar olan yolculuðunuz`;
+                }
+            }
+            
+            showError(message) {
+                this.clearMessages();
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = message;
+                
+                const activeForm = document.querySelector('.login-form');
+                activeForm.insertBefore(errorDiv, activeForm.firstChild);
+            }
+            
+            showSuccess(message) {
+                this.clearMessages();
+                const successDiv = document.createElement('div');
+                successDiv.className = 'success-message';
+                successDiv.textContent = message;
+                
+                const activeForm = document.querySelector('.login-form');
+                activeForm.insertBefore(successDiv, activeForm.firstChild);
+            }
+            
+            clearMessages() {
+                const errorMessages = document.querySelectorAll('.error-message, .success-message');
+                errorMessages.forEach(msg => msg.remove());
+            }
+        }
+        
+        // Sayfa geçiş fonksiyonları
+        function showRegisterPage() {
+            if (auth) {
+                auth.showRegisterPage();
+            }
+        }
+        
+        function showLoginPage() { if (auth) { auth.showLoginPage(); } }
+
+function handleRegisterSubmit(e) { e.preventDefault(); if (auth) { auth.handleRegister(e); } return false; }
+
+function logout() { if (auth) { auth.logout(); } }
+        
+        // şifre göster/gizle fonksiyonları
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('password-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        }
+        
+        function toggleRegisterPassword() {
+            const passwordInput = document.getElementById('register-password');
+            const passwordIcon = document.getElementById('register-password-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        }
+        
+        function toggleConfirmPassword() {
+            const passwordInput = document.getElementById('register-confirm-password');
+            const passwordIcon = document.getElementById('confirm-password-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        }
+        
+        // Auth sistemini baþlat
+        let auth;
+        document.addEventListener('DOMContentLoaded', function() {
+            auth = new AuthSystem();
+        });
+        
+        // Cikis fonksiyonu (ana uygulamada kullanilabilir)
+        function logout() {
+            if (confirm('Cikis yapmak istediginizden emin misiniz?')) {
+                if (auth && typeof auth.logout === 'function') {
+                    auth.logout();
+                } else {
+                    // Manual logout if auth system not available
+                    localStorage.removeItem('yksCurrentUser');
+                    localStorage.removeItem('yksRememberMe');
+                    sessionStorage.removeItem('yksCurrentUser');
+                    document.getElementById('login-page').style.display = 'flex';
+                    document.getElementById('register-page').style.display = 'none';
+                    document.getElementById('main-app').style.display = 'none';
+                }
+            }
+        }
+    </script>
 </body>
 </html>
