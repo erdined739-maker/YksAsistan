@@ -2706,7 +2706,17 @@ html, body {
                 "Küçük molalar vererek çalışmak verimliliği artırır.",
                 "Denemelerdeki netlerin her geçen gün artsın!",
                 "Düzenlı tekrar yapmak, öğrendiklerini pekiştirir.",
-                "Hedeflerini asla gözden kaybetme!"
+                "Hedeflerini asla gözden kaybetme!",
+                // Atatürk sözleri
+                "Başarı bir kişinin değil, milletin ortak eseridir.",
+                "Türk milleti zeki, çalışkan ve fedakârdır.",
+                "Hayatta en hakiki mürşit ilimdir.",
+                "Ey yükselen yeni nesil! İstikbal sizsiniz.",
+                "Benim naciz vücudum, fakat Türkiye Cumhuriyeti ilele ölmeyecektir.",
+                "Egemenlik kayıtsız şartsız milletindir.",
+                "Türk'ün Türk'ten başka dostu yoktur.",
+                "Ne mutlu Türküm diyene!.",
+                "Yurtta sulh, cihanda sulh lazımdır."
             ];
             
             const randomIndex = Math.floor(Math.random() * motivationTexts.length);
@@ -3428,6 +3438,7 @@ html, body {
         document.addEventListener('DOMContentLoaded', function() {
             updateCountdown();
             setInterval(updateCountdown, 1000);
+            setInterval(updateMotivation, 2000); // 2 saniyede bir motivasyon sözü değiştir
             loadNotesFromLocalStorage(); // Notları yükle
         });
             
