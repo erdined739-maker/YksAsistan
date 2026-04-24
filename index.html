@@ -2083,55 +2083,57 @@ html, body {
         </footer>
     </div>
 
-    <!-- Derslere Göre Dağılım Sayfası -->
-    <div class="container distribution-page" id="distribution-page">
-                
-        <header>
-            <h1><i class="fas fa-chart-bar"></i> Derslere Göre Dağılım</h1>
-            <p class="header-subtitle">Soru çözüm istatistiklerinizin detaylı analizi</p>
-        </header>
-        
-        <div class="distribution-grid">
-            <div class="distribution-card">
-                <h3>TYT Soru Dağılımı</h3>
-                <div class="chart-container" id="tyt-chart">
-                    <!-- TYT grafik çubukları buraya eklenecek -->
-                </div>
+    <!-- Derslere Göre Dağılım Modal -->
+    <div id="distribution-modal" class="modal" onclick="if(event.target === this) closeDistributionModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-chart-bar"></i> Derslere Göre Dağılım</h3>
+                <button class="modal-close" onclick="closeDistributionModal(); event.stopPropagation();">&times;</button>
             </div>
-            
-            <div class="distribution-card">
-                <h3>AYT Soru Dağılımı</h3>
-                <div class="chart-container" id="ayt-chart">
-                    <!-- AYT grafik çubukları buraya eklenecek -->
-                </div>
-            </div>
-            
-            <div class="distribution-card">
-                <h3>Genel İstatistikler</h3>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-label">Toplam TYT Soru</div>
-                        <div class="stat-value" id="total-tyt-questions">0</div>
+            <div class="modal-body">
+                <div class="distribution-grid">
+                    <div class="distribution-card">
+                        <h3>TYT Soru Dağılımı</h3>
+                        <div class="chart-container" id="tyt-chart-modal">
+                            <!-- TYT grafik çubukları buraya eklenecek -->
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Toplam AYT Soru</div>
-                        <div class="stat-value" id="total-ayt-questions">0</div>
+                    
+                    <div class="distribution-card">
+                        <h3>AYT Soru Dağılımı</h3>
+                        <div class="chart-container" id="ayt-chart-modal">
+                            <!-- AYT grafik çubukları buraya eklenecek -->
+                        </div>
+                    </div>
+                    
+                    <div class="distribution-card">
+                        <h3>Genel İstatistikler</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-label">Toplam TYT Soru</div>
+                                <div class="stat-value" id="total-tyt-questions-modal">0</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Toplam AYT Soru</div>
+                                <div class="stat-value" id="total-ayt-questions-modal">0</div>
+                            </div>
+                        </div>
+                        <div class="progress-container">
+                            <p>TYT/AYT Oranı</p>
+                            <div class="progress-bar">
+                                <div class="progress" id="tyt-ayt-ratio-modal" style="width: 50%"></div>
+                            </div>
+                            <span id="ratio-text-modal">%50 TYT - %50 AYT</span>
+                        </div>
+                    </div>
+                    
+                    <div class="distribution-card">
+                        <h3>En Çok Çözülen Dersler</h3>
+                        <ul class="subject-list" id="top-subjects-modal">
+                            <!-- En çok çözülen dersler buraya eklenecek -->
+                        </ul>
                     </div>
                 </div>
-                <div class="progress-container">
-                    <p>TYT/AYT Oranı</p>
-                    <div class="progress-bar">
-                        <div class="progress" id="tyt-ayt-ratio" style="width: 50%"></div>
-                    </div>
-                    <span id="ratio-text">%50 TYT - %50 AYT</span>
-                </div>
-            </div>
-            
-            <div class="distribution-card">
-                <h3>En Çok Çözülen Dersler</h3>
-                <ul class="subject-list" id="top-subjects">
-                    <!-- En çok çözülen dersler buraya eklenecek -->
-                </ul>
             </div>
         </div>
     </div>
@@ -2343,6 +2345,135 @@ html, body {
         // Modal kapat
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Dağılım modal'ını göster
+        function showDistributionModal() {
+            document.getElementById('distribution-modal').style.display = 'block';
+            updateDistributionChartsModal();
+        }
+        
+        // Dağılım modal'ını kapat
+        function closeDistributionModal() {
+            document.getElementById('distribution-modal').style.display = 'none';
+        }
+        
+        // Dağılım grafiklerini modal için güncelle
+        function updateDistributionChartsModal() {
+            const tytChart = document.getElementById('tyt-chart-modal');
+            const aytChart = document.getElementById('ayt-chart-modal');
+            const topSubjectsList = document.getElementById('top-subjects-modal');
+            
+            // Önce içeriği temizle
+            tytChart.innerHTML = '';
+            aytChart.innerHTML = '';
+            topSubjectsList.innerHTML = '';
+            
+            // TYT ve AYT toplam soruları hesapla
+            let totalTyt = 0;
+            let totalAyt = 0;
+            
+            for (const subject in questionStats.tyt) {
+                totalTyt += questionStats.tyt[subject].total;
+            }
+            
+            for (const subject in questionStats.ayt) {
+                totalAyt += questionStats.ayt[subject].total;
+            }
+            
+            // TYT/AYT oranını güncelle
+            const totalQuestions = totalTyt + totalAyt;
+            const tytRatio = totalQuestions > 0 ? (totalTyt / totalQuestions) * 100 : 50;
+            const aytRatio = totalQuestions > 0 ? (totalAyt / totalQuestions) * 100 : 50;
+            
+            document.getElementById('tyt-ayt-ratio-modal').style.width = `${tytRatio}%`;
+            document.getElementById('ratio-text-modal').textContent = `%${Math.round(tytRatio)} TYT - %${Math.round(aytRatio)} AYT`;
+            
+            document.getElementById('total-tyt-questions-modal').textContent = totalTyt;
+            document.getElementById('total-ayt-questions-modal').textContent = totalAyt;
+            
+            // TYT grafiğini oluştur
+            for (const subject in questionStats.tyt) {
+                const value = questionStats.tyt[subject].total;
+                if (value > 0) {
+                    const percentage = totalTyt > 0 ? (value / totalTyt) * 100 : 0;
+                    
+                    const chartBar = document.createElement('div');
+                    chartBar.className = 'chart-bar';
+                    chartBar.innerHTML = `
+                        <div class="chart-bar-label">${subject}</div>
+                        <div class="chart-bar-track">
+                            <div class="chart-bar-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="chart-bar-value">${value}</div>
+                    `;
+                    
+                    tytChart.appendChild(chartBar);
+                }
+            }
+            
+            // AYT grafiğini oluştur
+            for (const subject in questionStats.ayt) {
+                const value = questionStats.ayt[subject].total;
+                if (value > 0) {
+                    const percentage = totalAyt > 0 ? (value / totalAyt) * 100 : 0;
+                    
+                    const chartBar = document.createElement('div');
+                    chartBar.className = 'chart-bar';
+                    chartBar.innerHTML = `
+                        <div class="chart-bar-label">${subject}</div>
+                        <div class="chart-bar-track">
+                            <div class="chart-bar-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="chart-bar-value">${value}</div>
+                    `;
+                    
+                    aytChart.appendChild(chartBar);
+                }
+            }
+            
+            // En çok çözülen dersleri bul
+            const allSubjects = [];
+            
+            for (const subject in questionStats.tyt) {
+                allSubjects.push({
+                    name: `TYT ${subject}`,
+                    total: questionStats.tyt[subject].total
+                });
+            }
+            
+            for (const subject in questionStats.ayt) {
+                allSubjects.push({
+                    name: `AYT ${subject}`,
+                    total: questionStats.ayt[subject].total
+                });
+            }
+            
+            // Sırala ve göster
+            allSubjects.sort((a, b) => b.total - a.total);
+            
+            allSubjects.slice(0, 5).forEach(subject => {
+                if (subject.total > 0) {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <div class="target-item">
+                            <div class="target-text">${subject.name}</div>
+                            <div class="target-text" style="font-weight: bold;">${subject.total} soru</div>
+                        </div>
+                    `;
+                    topSubjectsList.appendChild(listItem);
+                }
+            });
+            
+            if (topSubjectsList.innerHTML === '') {
+                const emptyItem = document.createElement('li');
+                emptyItem.innerHTML = `
+                    <div style="text-align: center; color: #666; padding: 20px;">
+                        Henüz soru eklenmemiş.
+                    </div>
+                `;
+                topSubjectsList.appendChild(emptyItem);
+            }
         }
         
         // Tüm verileri sıfırla
