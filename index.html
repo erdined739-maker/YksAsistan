@@ -1708,7 +1708,7 @@ html, body {
                         <span class="checkmark"></span>
                         Beni hatirla
                     </label>
-                    <a href="#" class="forgot-password">Sifremi unuttum</a>
+                    <a href="#" class="forgot-password" onclick="sifremiUnuttum(); return false;">Sifremi unuttum</a>
                 </div>
                 
                 <button type="submit" class="btn btn-primary login-btn">
@@ -3495,7 +3495,27 @@ if ("serviceWorker" in navigator) {
             constructor() {
                 this.users = this.loadUsers();
                 this.currentUser = this.getCurrentUser();
+                this.firebaseAuth = null;
+                this.initFirebaseAuth();
                 this.init();
+            }
+            
+            initFirebaseAuth() {
+                // Firebase Auth'u başlat - global firebaseAuth değişkenini kullan
+                if (window.firebaseAuth) {
+                    // Firebase Auth state değiştiğinde
+                    window.firebaseAuth.onAuthStateChanged((user) => {
+                        if (user) {
+                            // Kullanıcı giriş yaptı
+                            this.currentUser = user;
+                            this.showMainApp();
+                        } else {
+                            // Kullanıcı çıkış yaptı
+                            this.currentUser = null;
+                            this.showLoginPage();
+                        }
+                    });
+                }
             }
             
             init() {
