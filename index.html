@@ -1381,8 +1381,9 @@ html, body {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    backdrop-filter: blur(5px);
+    background-color: rgba(0,0,0,0.55);
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.3s ease-out;
 }
 
 .modal-content {
@@ -1440,7 +1441,7 @@ html, body {
 /* Giriş Sayfası Stilleri */
 .login-container {
     min-height: 100vh;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1456,9 +1457,21 @@ html, body {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
     transform: rotate(30deg);
     animation: float 20s ease-in-out infinite;
+}
+
+.login-container::after {
+    content: '';
+    position: absolute;
+    bottom: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    transform: rotate(-30deg);
+    animation: float 25s ease-in-out infinite reverse;
 }
 
 @keyframes float {
@@ -1466,16 +1479,38 @@ html, body {
     50% { transform: rotate(30deg) translateY(-20px); }
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .login-card {
     background: white;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    border-radius: 24px;
+    box-shadow: 0 25px 70px rgba(0,0,0,0.25);
     padding: 40px;
     width: 100%;
     max-width: 450px;
     position: relative;
     z-index: 1;
     animation: slideUp 0.6s ease-out;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 @keyframes slideUp {
@@ -1513,37 +1548,75 @@ html, body {
 .login-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 18px;
 }
 
 .form-group {
     position: relative;
+    animation: slideDown 0.6s ease-out backwards;
+}
+
+.form-group:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.form-group:nth-child(3) {
+    animation-delay: 0.2s;
 }
 
 .form-group label {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--dark);
-    font-weight: 500;
+    color: #495057;
+    font-weight: 600;
     margin-bottom: 8px;
     font-size: 0.9rem;
+    letter-spacing: 0.3px;
+}
+
+.form-group label i {
+    color: #667eea;
 }
 
 .form-group input {
     width: 100%;
-    padding: 15px;
+    padding: 14px 16px;
     border: 2px solid #e9ecef;
-    border-radius: 12px;
+    border-radius: 14px;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-sizing: border-box;
+    background: #f8f9fa;
+}
+
+.form-group input::placeholder {
+    color: #adb5bd;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    transform: translateY(-2px);
+}
+
+.form-group input:hover:not(:focus) {
+    border-color: #dee2e6;
+    background: white;
+}
+
+.form-group input:disabled {
+    background: #e9ecef;
+    color: #adb5bd;
+    cursor: not-allowed;
+    border-color: #dee2e6;
+}
+
+.form-group input[aria-invalid="true"] {
+    border-color: #dc3545;
+    background: #fff5f5;
 }
 
 .password-toggle {
@@ -1553,23 +1626,26 @@ html, body {
     transform: translateY(-50%);
     background: none;
     border: none;
-    color: #6c757d;
+    color: #adb5bd;
     cursor: pointer;
-    padding: 5px;
-    border-radius: 5px;
-    transition: color 0.3s ease;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
     margin-top: 12px;
 }
 
 .password-toggle:hover {
-    color: var(--primary);
+    color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
 }
 
 .form-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 10px 0;
+    margin: 12px 0 8px 0;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .checkbox-container {
@@ -1579,31 +1655,74 @@ html, body {
     cursor: pointer;
     font-size: 0.9rem;
     color: #6c757d;
+    transition: color 0.3s ease;
+}
+
+.checkbox-container:hover {
+    color: #495057;
 }
 
 .checkbox-container input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: #667eea;
     width: auto;
     margin: 0;
 }
 
 .forgot-password {
-    color: var(--primary);
+    color: #667eea;
     text-decoration: none;
     font-size: 0.9rem;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 .forgot-password:hover {
-    color: var(--secondary);
+    color: #764ba2;
     text-decoration: underline;
 }
 
 .login-btn {
     width: 100%;
-    padding: 15px;
+    padding: 14px;
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 700;
     margin-top: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+}
+
+.login-btn:hover::before {
+    opacity: 1;
+}
+
+.login-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
 }
 
 .register-link {
@@ -1618,27 +1737,29 @@ html, body {
 }
 
 .register-link a {
-    color: var(--primary);
+    color: #667eea;
     text-decoration: none;
     font-weight: 600;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .register-link a:hover {
-    color: var(--secondary);
+    color: #764ba2;
     text-decoration: underline;
 }
 
 /* Hata Mesajları */
 .error-message {
-    background: #fee;
-    color: var(--danger);
-    padding: 12px;
-    border-radius: 8px;
+    background: linear-gradient(135deg, #ffe5e5 0%, #ffcccc 100%);
+    color: #c41e3a;
+    padding: 14px 16px;
+    border-radius: 12px;
     margin-bottom: 15px;
-    font-size: 0.9rem;
-    border-left: 4px solid var(--danger);
+    font-size: 0.95rem;
+    border-left: 4px solid #dc3545;
     animation: shake 0.5s ease-in-out;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.15);
+    font-weight: 500;
 }
 
 @keyframes shake {
@@ -1648,33 +1769,63 @@ html, body {
 }
 
 .success-message {
-    background: #d4edda;
-    color: #155724;
-    padding: 12px;
-    border-radius: 8px;
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #0d4723;
+    padding: 14px 16px;
+    border-radius: 12px;
     margin-bottom: 15px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     border-left: 4px solid #28a745;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.15);
+    font-weight: 500;
 }
 
 /* Mobil Uyumluluk */
 @media (max-width: 768px) {
     .login-card {
-        padding: 30px 20px;
+        padding: 28px 20px;
         margin: 10px;
+        border-radius: 20px;
     }
     
     .login-header h1 {
         font-size: 1.5rem;
     }
     
+    .login-header p {
+        font-size: 0.95rem;
+    }
+    
+    .form-group label {
+        font-size: 0.85rem;
+    }
+    
     .form-group input {
-        padding: 12px;
+        padding: 12px 14px;
+        font-size: 1rem;
     }
     
     .login-btn {
         padding: 12px;
         font-size: 1rem;
+        font-weight: 600;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 15px;
+    }
+    
+    .modal-header {
+        padding: 18px;
+    }
+    
+    .modal-body {
+        padding: 18px;
+    }
+    
+    .register-link p {
+        font-size: 0.85rem;
     }
 }
     </style>
@@ -3703,6 +3854,47 @@ if ("serviceWorker" in navigator) {
 function handleRegisterSubmit(e) { e.preventDefault(); if (auth) { auth.handleRegister(e); } return false; }
 
 function logout() { if (auth) { auth.logout(); } }
+
+// Kaynak ekleme fonksiyonu
+function addResource() {
+    const resourceType = document.getElementById('resource-type').value;
+    const resourceName = document.getElementById('resource-name').value.trim();
+    const resourceSubject = document.getElementById('resource-subject').value.trim();
+    
+    if (resourceName === "" || resourceSubject === "") return;
+    
+    const resourcesList = document.getElementById('resources-list');
+    const listItem = document.createElement('li');
+    
+    listItem.innerHTML = `
+        <div class="resource-item">
+            <div>
+                <strong>${resourceType}</strong> - ${resourceName} (${resourceSubject}) 
+                <span class="badge" style="background: ${currentResourceExamType === 'tyt' ? 'var(--tyt)' : 'var(--ayt)'}; color: white; padding: 2px 6px; border-radius: 12px; font-size: 0.7rem;">
+                    ${currentResourceExamType.toUpperCase()}
+                </span>
+            </div>
+            <button class="delete-btn" onclick="removeResource(this)"><i class="fas fa-trash"></i></button>
+        </div>
+    `;
+    
+    resourcesList.appendChild(listItem);
+    
+    document.getElementById('resource-type').value = 'Kitap';
+    document.getElementById('resource-name').value = "";
+    document.getElementById('resource-subject').value = "";
+    selectResourceExamType('tyt');
+    
+    saveToLocalStorage();
+    showNotification('Kaynak başarıyla eklendi!');
+}
+
+// Kaynak silme fonksiyonu
+function removeResource(button) {
+    button.closest('li').remove();
+    saveToLocalStorage();
+    showNotification('Kaynak başarıyla silindi!');
+}
         
         // şifre göster/gizle fonksiyonları
         function togglePassword() {
