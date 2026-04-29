@@ -5,7 +5,6 @@
 <head>
     <!-- Sayfa başlığı ve meta bilgiler -->
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Karakter kodlaması UTF-8 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <!-- Mobil cihazlar için responsive tasarım ayarı -->
@@ -42,32 +41,6 @@
             --ayt: #8b5cf6; /* AYT sınav tipi rengi - ileri eğitim vurgusu için */
             --safe-area-inset-top: env(safe-area-inset-top, 0px); /* iOS üst güvenli alan */
             --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px); /* iOS alt güvenli alan */
-            
-            /* Light Mode Variables */
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-tertiary: #e9ecef;
-            --text-primary: #212529;
-            --text-secondary: #6c757d;
-            --text-muted: #adb5bd;
-            --border-color: #dee2e6;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --card-bg: #ffffff;
-            --header-bg: linear-gradient(135deg, #3003fa, #f8f9fa);
-        }
-
-        /* Dark Mode Variables */
-        [data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
-            --bg-tertiary: #404040;
-            --text-primary: #ffffff;
-            --text-secondary: #b3b3b3;
-            --text-muted: #808080;
-            --border-color: #404040;
-            --shadow-color: rgba(0, 0, 0, 0.3);
-            --card-bg: #2d2d2d;
-            --header-bg: linear-gradient(135deg, #0f0f23, #2d2d2d);
         }
         
         /* Genel sayfa stilleri - Tüm elementler için temel reset ve font ayarları */
@@ -81,12 +54,11 @@
         
         /* Sayfa gövdesi stilleri - Ana sayfa arka planı ve genel düzen */
         body {
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-            color: var(--text-primary);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); /* Beyaz gradient arka plan */
+            color: var(--dark); /* Koyu metin rengi */
             line-height: 1.6;
             min-height: 100vh;
             padding: var(--safe-area-inset-top) 0 var(--safe-area-inset-bottom) 0; /* iOS güvenli alan desteği */
-            transition: background-color 0.3s ease, color 0.3s ease;
         }
         
         /* Ana konteyner - Sayfa içeriğini ortalar ve maksimum genişlik ayarlar */
@@ -100,15 +72,14 @@
         header {
             text-align: center;
             padding: 20px 15px;
-            background: var(--header-bg);
-            color: var(--text-primary);
+            background: linear-gradient(135deg, #3003fa, #f8f9fa); /* Beyaz gradient */
+            color: var(--dark); /* Koyu metin rengi */
             border-radius: 12px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px var(--shadow-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             position: relative;
             overflow: hidden;
             align-items: center;
-            transition: background 0.3s ease, color 0.3s ease;
         }
         
         .loading-logo {
@@ -206,16 +177,15 @@
         
         /* Geri sayım konteyneri - Sınav tarihine kalan süreyi gösterir */
         .countdown-container {
-            background-color: var(--card-bg);
+            background-color: #fcfcfc; /* Beyaz arka plan */
             padding: 20px 15px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px var(--shadow-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             margin-bottom: 20px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            border: 1px solid var(--border-color);
-            transition: background-color 0.3s ease;
+            border: 1px solid #e9ecef; /* İnce gri kenarlık */
         }
         
         .countdown-container::after {
@@ -276,12 +246,12 @@
         
         /* Ana kartlar - Hedefler, çalışma planı gibi bölümler için */
         .card {
-            background-color: var(--card-bg);
+            background-color: #ffffff; /* Beyaz arka plan */
             border-radius: 18px;
             padding: 24px;
-            box-shadow: 0 8px 24px var(--shadow-color);
-            transition: transform 0.3s, background-color 0.3s ease;
-            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            border: 1px solid #e9ecef; /* İnce gri kenarlık */
             min-height: 420px; /* Eşit yükseklik için minimum yükseklik */
             display: flex;
             flex-direction: column;
@@ -1707,97 +1677,6 @@ html, body {
         font-size: 1rem;
     }
 }
-
-/* Dark Mode Toggle Button */
-.dark-mode-toggle {
-    background: rgba(255, 255, 255, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    color: white;
-    font-size: 1.2rem;
-}
-
-.dark-mode-toggle:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.dark-mode-toggle:active {
-    transform: scale(0.95);
-}
-
-/* Dark mode için giriş formu stilleri */
-[data-theme="dark"] .login-container {
-    background: linear-gradient(135deg, #0f0f23, #1a1a1a);
-}
-
-[data-theme="dark"] .login-card {
-    background: var(--card-bg);
-    color: var(--text-primary);
-}
-
-[data-theme="dark"] .form-group input {
-    background: var(--bg-tertiary);
-    border-color: var(--border-color);
-    color: var(--text-primary);
-}
-
-[data-theme="dark"] .form-group input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2);
-}
-
-[data-theme="dark"] .checkbox-container {
-    color: var(--text-secondary);
-}
-
-[data-theme="dark"] .forgot-password {
-    color: var(--primary);
-}
-
-[data-theme="dark"] .register-link p {
-    color: var(--text-secondary);
-}
-
-[data-theme="dark"] .register-link a {
-    color: var(--primary);
-}
-
-/* Mobil Uyumluluk */
-@media (max-width: 768px) {
-    .login-card {
-        padding: 30px 20px;
-        margin: 10px;
-    }
-    
-    .login-header h1 {
-        font-size: 1.5rem;
-    }
-    
-    .form-group input {
-        padding: 12px;
-    }
-    
-    .login-btn {
-        padding: 12px;
-        font-size: 1rem;
-    }
-    
-    .dark-mode-toggle {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
-    }
-}
     </style>
 </head>
 <body>
@@ -1809,15 +1688,15 @@ html, body {
                 <p>Hesabınıza giriş yapın</p>
             </div>
             
-            <form id="login-form" class="login-form" onsubmit="handleLoginSubmit(event); return false;">
+            <form id="login-form" class="login-form">
                 <div class="form-group">
                     <label for="email"><i class="fas fa-envelope"></i> E-posta</label>
                     <input type="email" id="email" name="email" placeholder="ornek@email.com" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="password"><i class="fas fa-lock"></i> Şifre</label>
-                    <input type="password" id="password" name="password" placeholder="Şifrenizi girin" required>
+                    <label for="password"><i class="fas fa-lock"></i> Sifre</label>
+                    <input type="password" id="password" name="password" placeholder="Sifrenizi girin" required>
                     <button type="button" class="password-toggle" onclick="togglePassword()">
                         <i class="fas fa-eye" id="password-icon"></i>
                     </button>
@@ -1827,17 +1706,17 @@ html, body {
                     <label class="checkbox-container">
                         <input type="checkbox" id="remember-me">
                         <span class="checkmark"></span>
-                        Beni hatırla
+                        Beni hatirla
                     </label>
-                    <a href="#" class="forgot-password" onclick="sifremiUnuttum(); return false;">Şifremi unuttum</a>
+                    <a href="#" class="forgot-password">Sifremi unuttum</a>
                 </div>
                 
                 <button type="submit" class="btn btn-primary login-btn">
-                    <i class="fas fa-sign-in-alt"></i> Giriş Yap
+                    <i class="fas fa-sign-in-alt"></i> Giris Yap
                 </button>
                 
                 <div class="register-link">
-                    <p>Hesabınız yok mu? <a href="#" onclick="showRegisterPage()">Kayıt Ol</a></p>
+                    <p>Hesabiniz yok mu? <a href="#" onclick="showRegisterPage()">Kayit Ol</a></p>
                 </div>
             </form>
         </div>
@@ -1847,14 +1726,14 @@ html, body {
     <div id="register-page" class="login-container" style="display: none;">
         <div class="login-card">
             <div class="login-header">
-                <h1><i class="fas fa-user-plus"></i> Kayıt Ol</h1>
-                <p>Yeni hesap oluşturun</p>
+                <h1><i class="fas fa-user-plus"></i> Kayit Ol</h1>
+                <p>Yeni hesap olusturun</p>
             </div>
             
             <form id="register-form" class="login-form" onsubmit="handleRegisterSubmit(event); return false;">
                 <div class="form-group">
                     <label for="register-name"><i class="fas fa-user"></i> Ad Soyad</label>
-                    <input type="text" id="register-name" name="name" placeholder="Adınızı soyadınızı girin" required>
+                    <input type="text" id="register-name" name="name" placeholder="Adinizi soyadinizi girin" required>
                 </div>
                 
                 <div class="form-group">
@@ -1863,27 +1742,27 @@ html, body {
                 </div>
                 
                 <div class="form-group">
-                    <label for="register-password"><i class="fas fa-lock"></i> Şifre</label>
-                    <input type="password" id="register-password" name="password" placeholder="Şifre oluşturun" required>
+                    <label for="register-password"><i class="fas fa-lock"></i> Sifre</label>
+                    <input type="password" id="register-password" name="password" placeholder="Sifre olusturun" required>
                     <button type="button" class="password-toggle" onclick="toggleRegisterPassword()">
                         <i class="fas fa-eye" id="register-password-icon"></i>
                     </button>
                 </div>
                 
                 <div class="form-group">
-                    <label for="register-confirm-password"><i class="fas fa-lock"></i> Şifre Tekrar</label>
-                    <input type="password" id="register-confirm-password" name="confirmPassword" placeholder="Şifrenizi tekrar girin" required>
+                    <label for="register-confirm-password"><i class="fas fa-lock"></i> Sifre Tekrar</label>
+                    <input type="password" id="register-confirm-password" name="confirmPassword" placeholder="Sifrenizi tekrar girin" required>
                     <button type="button" class="password-toggle" onclick="toggleConfirmPassword()">
                         <i class="fas fa-eye" id="confirm-password-icon"></i>
                     </button>
                 </div>
                 
                 <button type="submit" class="btn btn-primary login-btn">
-                    <i class="fas fa-user-plus"></i> Kayıt Ol
+                    <i class="fas fa-user-plus"></i> Kayit Ol
                 </button>
                 
                 <div class="register-link">
-                    <p>Zaten hesabınız var mı? <a href="#" onclick="showLoginPage()">Giriş Yap</a></p>
+                    <p>Zaten hesabiniz var mi? <a href="#" onclick="showLoginPage()">Giris Yap</a></p>
                 </div>
             </form>
         </div>
@@ -1894,11 +1773,6 @@ html, body {
         <!-- Ana sayfa içeriði -->
     <div class="container main-page">
         <header>
-            <div style="position: absolute; top: 15px; right: 15px; z-index: 10;">
-                <button id="dark-mode-toggle" class="dark-mode-toggle" onclick="toggleDarkMode()" title="Karanlık Mod">
-                    <i class="fas fa-moon" id="theme-icon"></i>
-                </button>
-            </div>
             <h1><i class="fas fa-graduation-cap"></i> YKS Asistaný</h1>
             <p class="header-subtitle">20 Haziran 2026, 10:15'e kadar olan yolculuðunuz</p>
             <div class="exam-info">
@@ -3621,29 +3495,7 @@ if ("serviceWorker" in navigator) {
             constructor() {
                 this.users = this.loadUsers();
                 this.currentUser = this.getCurrentUser();
-                this.auth = null;
-                this.initFirebaseAuth();
                 this.init();
-            }
-            
-            initFirebaseAuth() {
-                // Firebase Auth'u başlat - global firebaseAuth değişkenini kullan
-                if (window.firebaseAuth) {
-                    this.auth = window.firebaseAuth;
-                    
-                    // Firebase Auth state değiştiğinde
-                    this.auth.onAuthStateChanged((user) => {
-                        if (user) {
-                            // Kullanıcı giriş yaptı
-                            this.currentUser = user;
-                            this.showMainApp();
-                        } else {
-                            // Kullanıcı çıkış yaptı
-                            this.currentUser = null;
-                            this.showLoginPage();
-                        }
-                    });
-                }
             }
             
             init() {
@@ -3698,54 +3550,39 @@ if ("serviceWorker" in navigator) {
             
             handleLogin(e) {
                 e.preventDefault();
-                const email = document.getElementById('email').value.trim();
-                const password = document.getElementById('password').value.trim();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
                 const rememberMe = document.getElementById('remember-me').checked;
                 
-                // Firebase ile giriş yap
-                if (this.auth) {
-                    this.auth.signInWithEmailAndPassword(email, password)
-                        .then((userCredential) => {
-                            // Giriş başarılı
-                            const user = userCredential.user;
-                            this.saveCurrentUser(user, rememberMe);
-                            this.showSuccess('Giris basarili! Yonlendiriliyorsunuz...');
-                            
-                            setTimeout(() => {
-                                this.showMainApp();
-                            }, 1500);
-                        })
-                        .catch((error) => {
-                            let errorMessage = 'Giris hatasi: ';
-                            switch(error.code) {
-                                case 'auth/user-not-found':
-                                    errorMessage += 'Kullanıcı bulunamadı!';
-                                    break;
-                                case 'auth/wrong-password':
-                                    errorMessage += 'Sifre hatalı!';
-                                    break;
-                                case 'auth/invalid-email':
-                                    errorMessage += 'Gecersiz e-posta adresi!';
-                                    break;
-                                case 'auth/user-disabled':
-                                    errorMessage += 'Hesap devre dışı!';
-                                    break;
-                                default:
-                                    errorMessage += error.message;
-                            }
-                            this.showError(errorMessage);
-                        });
-                } else {
-                    this.showError('Firebase auth yüklenmedi!');
+                // Kullanıcı bul
+                const user = this.users.find(u => u.email === email);
+                
+                if (!user) {
+                    this.showError('E-posta veya sifre hatali!');
+                    return;
                 }
+                
+                // Basit şifre kontrolü (gerçek uygulamada hash'lenmiþ olmalý)
+                if (user.password !== password) {
+                    this.showError('E-posta veya sifre hatali!');
+                    return;
+                }
+                
+                // Giriş başarılı
+                this.saveCurrentUser(user, rememberMe);
+                this.showSuccess('Giris basarili! Yonlendiriliyorsunuz...');
+                
+                setTimeout(() => {
+                    this.showMainApp();
+                }, 1500);
             }
             
             handleRegister(e) {
                 e.preventDefault();
                 const name = document.getElementById('register-name').value;
-                const email = document.getElementById('register-email').value.trim();
-                const password = document.getElementById('register-password').value.trim();
-                const confirmPassword = document.getElementById('register-confirm-password').value.trim();
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
                 
                 // Validasyon
                 if (password !== confirmPassword) {
@@ -3758,71 +3595,42 @@ if ("serviceWorker" in navigator) {
                     return;
                 }
                 
-                // Firebase ile kayıt ol
-                if (this.auth) {
-                    this.auth.createUserWithEmailAndPassword(email, password)
-                        .then((userCredential) => {
-                            // Kullanıcı başarıyla oluşturuldu
-                            const user = userCredential.user;
-                            
-                            // Kullanıcı adını güncelle
-                            user.updateProfile({
-                                displayName: name
-                            }).then(() => {
-                                this.showSuccess('Kayit basarili! Giris yapabilirsiniz.');
-                                
-                                // Formu temizle
-                                document.getElementById('register-form').reset();
-                                
-                                // Giriş sayfasına yönlendir
-                                setTimeout(() => {
-                                    this.showLoginPage();
-                                }, 1500);
-                            }).catch((error) => {
-                                this.showError('Isim güncellenemedi: ' + error.message);
-                            });
-                        })
-                        .catch((error) => {
-                            let errorMessage = 'Kayit hatasi: ';
-                            switch(error.code) {
-                                case 'auth/email-already-in-use':
-                                    errorMessage += 'Bu e-posta zaten kayitli!';
-                                    break;
-                                case 'auth/invalid-email':
-                                    errorMessage += 'Gecersiz e-posta adresi!';
-                                    break;
-                                case 'auth/weak-password':
-                                    errorMessage += 'Sifre çok zayıf!';
-                                    break;
-                                default:
-                                    errorMessage += error.message;
-                            }
-                            this.showError(errorMessage);
-                        });
-                } else {
-                    this.showError('Firebase auth yüklenmedi!');
+                // E-posta kontrolü
+                if (this.users.find(u => u.email === email)) {
+                    this.showError('Bu e-posta zaten kayitli!');
+                    return;
                 }
+                
+                // Yeni kullanici
+                const newUser = {
+                    id: Date.now().toString(),
+                    name: name,
+                    email: email,
+                    password: password, // Gerçek uygulamada hash'lenmeli
+                    createdAt: new Date().toISOString()
+                };
+                
+                this.users.push(newUser);
+                this.saveUsers();
+                
+                this.showSuccess('Kayit basarili! Giris yapabilirsiniz.');
+                
+                // Formu temizle
+                document.getElementById('register-form').reset();
+                
+                // Giriş sayfasına yönlendir
+                setTimeout(() => {
+                    this.showLoginPage();
+                }, 1500);
             }
             
             logout() {
-                // Firebase ile çıkış yap
-                if (this.auth) {
-                    this.auth.signOut()
-                        .then(() => {
-                            // Çıkış başarılı
-                            this.currentUser = null;
-                            this.showLoginPage();
-                        })
-                        .catch((error) => {
-                            console.error('Çıkış hatası:', error);
-                            this.currentUser = null;
-                            this.showLoginPage();
-                        });
-                } else {
-                    // Manuel çıkış
-                    this.currentUser = null;
-                    this.showLoginPage();
-                }
+                // Her iki storage'dan da temizle
+                localStorage.removeItem('yksCurrentUser');
+                localStorage.removeItem('yksRememberMe');
+                sessionStorage.removeItem('yksCurrentUser');
+                this.currentUser = null;
+                this.showLoginPage();
             }
             
             showLoginPage() {
@@ -3853,8 +3661,7 @@ if ("serviceWorker" in navigator) {
                 // Ana sayfada kullanıcı bilgisini göster
                 const header = document.querySelector('header p.header-subtitle');
                 if (header && this.currentUser) {
-                    const userName = this.currentUser.displayName || this.currentUser.email || 'Kullanıcı';
-                    header.textContent = `Hoş geldin, ${userName}! 20 Haziran 2026, 10:15'e kadar olan yolculuğunuz`;
+                    header.textContent = `Hoş geldin, ${this.currentUser.name}! 20 Haziran 2026, 10:15'e kadar olan yolculuðunuz`;
                 }
             }
             
@@ -3896,14 +3703,6 @@ if ("serviceWorker" in navigator) {
 function handleRegisterSubmit(e) { e.preventDefault(); if (auth) { auth.handleRegister(e); } return false; }
 
 function logout() { if (auth) { auth.logout(); } }
-        
-        function handleLoginSubmit(e) { 
-            e.preventDefault(); 
-            if (auth) { 
-                auth.handleLogin(e); 
-            } 
-            return false; 
-        }
         
         // şifre göster/gizle fonksiyonları
         function togglePassword() {
@@ -3974,71 +3773,5 @@ function logout() { if (auth) { auth.logout(); } }
             }
         }
     </script>
-    <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBKBEBXJmSlqLCEYUNL4dblRJErWyBreFE",
-  authDomain: "yksasistan-92c9f.firebaseapp.com",
-  projectId: "yksasistan-92c9f",
-  storageBucket: "yksasistan-92c9f.firebasestorage.app",
-  messagingSenderId: "440445317741",
-  appId: "1:440445317741:web:c3070279b5af3dc90bc564",
-  measurementId: "G-CH80DWJ89E"
-};
-
-const app = initializeApp(firebaseConfig);
-const firebaseAuth = getAuth(app);
-
-// Firebase auth'u global olarak ata
-window.firebaseAuth = firebaseAuth;
-
-window.sifremiUnuttum = function () {
-  const email = prompt("Mail adresini gir:");
-
-  sendPasswordResetEmail(firebaseAuth, email)
-    .then(() => {
-      alert("Şifre sıfırlama maili gönderildi.");
-    })
-    .catch((error) => {
-      alert("Hata: " + error.message);
-    });
-};
-
-        // Dark Mode Toggle Function
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            const themeIcon = document.getElementById('theme-icon');
-            const currentTheme = html.getAttribute('data-theme');
-            
-            if (currentTheme === 'dark') {
-                html.removeAttribute('data-theme');
-                themeIcon.className = 'fas fa-moon';
-                localStorage.setItem('theme', 'light');
-            } else {
-                html.setAttribute('data-theme', 'dark');
-                themeIcon.className = 'fas fa-sun';
-                localStorage.setItem('theme', 'dark');
-            }
-        }
-
-        // Load saved theme on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedTheme = localStorage.getItem('theme');
-            const themeIcon = document.getElementById('theme-icon');
-            
-            if (savedTheme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                if (themeIcon) {
-                    themeIcon.className = 'fas fa-sun';
-                }
-            } else {
-                if (themeIcon) {
-                    themeIcon.className = 'fas fa-moon';
-                }
-            }
-        });
-</script>
 </body>
 </html>
