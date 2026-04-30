@@ -1,6 +1,6 @@
 {
-  "name": "YKS Asistanı",
-  "short_name": "YKS Asistan",
+  "name": "NETVORA",
+  "short_name": "NETVORA",
   "start_url": "/YksAsistan/",
   "scope": "/YksAsistan/",
   "display": "standalone",

@@ -129,6 +129,23 @@
             box-shadow: 0 18px 50px rgba(102, 126, 234, 0.25);
             border: 3px solid rgba(255,255,255,0.36);
             text-transform: uppercase;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .auth-logo-mark img,
+        .main-brand .brand-mark img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            border-radius: inherit;
+        }
+
+        .login-header h1 img.login-main-logo {
+            width: 160px;
+            height: auto;
+            object-fit: contain;
         }
 
         .auth-logo-text {
@@ -1916,11 +1933,10 @@ html, body {
     <div id="login-page" class="login-container">
         <div class="login-card">
             <div class="auth-logo">
-                <div class="auth-logo-mark">N</div>
-                <div class="auth-logo-text">NETVORA</div>
+                <div class="auth-logo-mark"><img src="logo1.png" alt="Logo" class="auth-logo-img"></div>
             </div>
             <div class="login-header">
-                <h1><i class="fas fa-graduation-cap"></i> NETVORA</h1>
+                <h1><img src="logo.png" alt="NETVORA" class="login-main-logo"></h1>
                 <p>Hesabınıza giriş yapın</p>
             </div>
             
@@ -1962,8 +1978,7 @@ html, body {
     <div id="register-page" class="login-container" style="display: none;">
         <div class="login-card">
             <div class="auth-logo">
-                <div class="auth-logo-mark">N</div>
-                <div class="auth-logo-text">NETVORA</div>
+                <div class="auth-logo-mark"><img src="logo1.png" alt="Logo" class="auth-logo-img"></div>
             </div>
             <div class="login-header">
                 <h1><i class="fas fa-user-plus"></i> Kayit Ol</h1>
@@ -2014,7 +2029,7 @@ html, body {
     <div class="container main-page">
         <header>
             <div class="main-brand">
-                <div class="brand-mark">N</div>
+                <div class="brand-mark"><img src="logo1.png" alt="Logo" class="brand-logo-img"></div>
                 <div class="brand-text">
                     NETVORA
                     <small>Hedef odaklı çalışma merkezi</small>
@@ -3993,6 +4008,8 @@ if ("serviceWorker" in navigator) {
         
         function showLoginPage() { if (window.authSystem) { window.authSystem.showLoginPage(); } }
 
+function handleLoginSubmit(e) { e.preventDefault(); if (window.authSystem) { window.authSystem.handleLogin(e); } return false; }
+
 function handleRegisterSubmit(e) { e.preventDefault(); if (window.authSystem) { window.authSystem.handleRegister(e); } return false; }
 
 function logout() { if (window.authSystem) { window.authSystem.logout(); } }
@@ -4090,7 +4107,8 @@ function removeResource(button) {
         // Auth sistemini baþlat
         let auth;
         document.addEventListener('DOMContentLoaded', function() {
-            auth = new AuthSystem();
+            window.authSystem = new AuthSystem();
+            auth = window.authSystem;
         });
         
         // Cikis fonksiyonu (ana uygulamada kullanilabilir)
